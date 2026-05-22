@@ -13,12 +13,10 @@ class LatexSeparators(StrEnum):
     COMMENT = "%"
     TEXT = "\n"
 
-
-
 class VecDbRecord(BaseModel):
     section: str
-    subsection: str 
-    content: str 
+    subsection: str = ""
+    content: str = ""
     doc_id: UUID | None = None 
 
 class DocSegment(BaseModel):

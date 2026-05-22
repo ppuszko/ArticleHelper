@@ -1,0 +1,4 @@
+
+
+class TextProcessor:
+    pass
