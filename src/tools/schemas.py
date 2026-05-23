@@ -1,4 +1,4 @@
-from pydantic import BaseModel 
+from pydantic import BaseModel, Field 
 
 from uuid import UUID 
 from enum import StrEnum
@@ -19,6 +19,19 @@ class VecDbRecord(BaseModel):
     content: str = ""
     doc_id: UUID | None = None 
 
+class SectionInfo(BaseModel):
+    """Translated and cleaned section content and section summary"""
+    translated_content: str
+    summary: str 
+
+class ProcessedSection(SectionInfo):
+    section: str    
+
 class DocSegment(BaseModel):
     type: LatexSeparators
     content: str = ""
+
+class AuthorsInfo(BaseModel):
+    """Author list and ciation"""
+    authors: str = Field("Comma-separated list of authors.")
+    citation: str = Field("Citation formula for given resource.")
