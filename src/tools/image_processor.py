@@ -1,16 +1,14 @@
 from langchain.messages import SystemMessage, HumanMessage
-from langchain_ollama import ChatOllama 
-
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.language_models.chat_models import BaseChatModel
 import time
 
 from config.prompts import PromptsConfig 
 
-vl_model = ChatOllama(model="qwen3-vl:8b", temperature=0.1)
-
 
 class ImageProcessor:
-    def __init__(self, model: ChatOllama = vl_model):
-        self._model = model 
+    def __init__(self, model: BaseChatModel):
+        self._model: BaseChatModel = model 
 
     def process_image(self, image: str) -> str:
         start = time.time()

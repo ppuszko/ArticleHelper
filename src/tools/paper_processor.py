@@ -1,4 +1,3 @@
-
 import base64
 import pymupdf
 
@@ -7,9 +6,7 @@ from .segmenter import Segmenter
 from .image_processor import ImageProcessor
 from .text_processor import TextProcessor
 
-from ollama import Client
 
-oc = Client()
 
 class PaperProcessor:
     def __init__(self, segmenter: Segmenter, img_proc: ImageProcessor, text_proc: TextProcessor):
@@ -21,11 +18,11 @@ class PaperProcessor:
         self._full_sections = {}
         self._author: str = ""
     
-    def process_image(self, segment: DocSegment):
+    def _process_image(self, segment: DocSegment):
         paths = self._segmenter.get_fig_paths(segment.content)
-        content = "Figure(s) description:"
-        for p in paths:
-            temp = ""
+        content = ""
+        for iter, p in enumerate(paths):
+            description = ""
             print(p)
             p_split = p.split('.')
 
@@ -33,17 +30,17 @@ class PaperProcessor:
                 with open(f"files/{p}", "rb") as f:
                     file = f.read()
                 img_b64 = base64.b64encode(file).decode()
-                temp = self._img_proc.process_image(img_b64)
+                description = self._img_proc.process_image(img_b64)
             elif p_split[-1] == "pdf":
                 doc = pymupdf.open(f"files/{p}")
                 for page in doc:
-                    temp = " ".join([temp, str(page.get_text())]) # type: ignore
+                    description = " ".join([description, str(page.get_text())]) # type: ignore
             else:
-                temp = p
-            content = " ".join([content, temp])
+                description = p
+            content = " ".join([f"Figure{iter+1}:", description])
         segment.content = content
 
-    def concatenate_segments(self, segment: DocSegment):
+    def _concatenate_segments(self, segment: DocSegment):
         if segment.type == LatexSeparators.TITLE:
             self._title = self._segmenter.get_marker_name(segment.content)
         elif segment.type == LatexSeparators.SECTION:
@@ -68,31 +65,27 @@ class PaperProcessor:
         elif segment.type == LatexSeparators.AUTHOR:
             self._author = segment.content
 
-    def prep_sections(self, segments: list[DocSegment]):
+    def _prep_sections(self, segments: list[DocSegment]):
         for seg in segments:
             if seg.type == LatexSeparators.FIGURE:
-                self.process_image(seg)
-            self.concatenate_segments(seg)
+                self._process_image(seg)
+            self._concatenate_segments(seg)
         if self._current_content != "":
             self._records[-1].content = self._current_content
 
         for r in self._records:
             self._full_sections[r.section] = " ".join([self._full_sections.get(r.section, ""), r.content])
 
-
-        oc.generate(model="qwen3-vl:8b", keep_alive=0)
-
-
     def process_paper(self, path: str) -> list[ProcessedSection]:
         with open(path) as f:
             text = f.read()
 
         segments = self._segmenter.create_segments(text)
-        self.prep_sections(segments)
+        self._prep_sections(segments)
         
         processed = []
-        for k, v in self._full_sections.items():
-            section = self._text_proc.process_section(v)
-            processed.append(ProcessedSection(**(section.model_dump()), section=k))
+        for section_name, section_content in self._full_sections.items():
+            section = self._text_proc.process_section(section_content)
+            processed.append(ProcessedSection(**(section.model_dump()), section=section_name))
 
         return processed
