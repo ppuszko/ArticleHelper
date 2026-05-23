@@ -8,7 +8,6 @@ from config.prompts import PromptsConfig
 vl_model = ChatOllama(model="qwen3-vl:8b", temperature=0.1)
 
 
-
 class ImageProcessor:
     def __init__(self, model: ChatOllama = vl_model):
         self._model = model 
