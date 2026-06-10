@@ -17,5 +17,5 @@ class User(SQLModel, table=True):
     email: EmailStr = Field(nullable=False, unique=True)
     hashed_password: str = Field(nullable=False, exclude=True, repr=False)
     is_active: bool = Field(nullable=True, default=True)
-    is_superuser: bool = Field(nullable=False, default=True)
-    is_verified: bool = Field(nullable=False, default=True)
+    is_superuser: bool = Field(nullable=False, default=False)
+    is_verified: bool = Field(nullable=False, default=False)

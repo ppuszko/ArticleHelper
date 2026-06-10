@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    @apply bg-surface text-text-primary antialiased;
+    min-height: 100vh;
+  }
+
+  *:focus-visible {
+    @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-surface;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px #161b27 inset;
+    -webkit-text-fill-color: #e8eaf0;
+    caret-color: #e8eaf0;
+  }
+}
+
+@layer components {
+  .auth-input {
+    @apply w-full bg-surface-raised border border-surface-border rounded-lg px-4 py-3
+           text-text-primary placeholder-text-placeholder
+           focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent
+           transition-colors duration-150 text-sm;
+  }
+
+  .btn-primary {
+    @apply w-full bg-accent hover:bg-accent-hover text-white font-medium
+           rounded-lg px-4 py-3 text-sm
+           transition-colors duration-150
+           disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+
+  .auth-card {
+    @apply bg-surface-raised border border-surface-border rounded-2xl p-8;
+  }
+
+  .field-label {
+    @apply block text-xs font-medium text-text-secondary uppercase tracking-widest mb-2;
+  }
+}

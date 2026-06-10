@@ -6,7 +6,7 @@ from fastapi_users.db import SQLAlchemyUserDatabase
 
 from collections.abc import AsyncIterator
 
-from models import User
+from .models import User
 from ..config.db import DBConfig
 
 
