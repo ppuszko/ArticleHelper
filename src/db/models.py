@@ -19,3 +19,21 @@ class User(SQLModel, table=True):
     is_active: bool = Field(nullable=True, default=True)
     is_superuser: bool = Field(nullable=False, default=False)
     is_verified: bool = Field(nullable=False, default=False)
+
+
+class Document(SQLModel, table=True):
+    __tablename__: str = "documents"
+    id: UUID = Field(default=uuid7, primary_key=True)
+    title: str = Field(nullable=False)
+    authors: str = Field(nullable=False)
+    citation: str = Field(nullable=False)
+
+
+class DocSegment(SQLModel, table=True):
+    __tablename__: str = "doc_segments"
+    id: UUID = Field(default=uuid7, primary_key=True)
+    content: str = Field(nullable=False)
+    translated_content: str = Field(nullable=False)
+    summary: str = Field(nullable=False)
+    section: str = Field(default="")
+    doc_id: UUID = Field(foreign_key="documents.id")

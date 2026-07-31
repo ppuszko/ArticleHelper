@@ -5,8 +5,21 @@
 @layer base {
   html,
   body {
-    @apply bg-surface text-text-primary antialiased;
-    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    @apply bg-surface text-text-primary min-h-screen;
+    background-image: radial-gradient(circle at 50% 50%, rgba(181, 174, 159, 0.2) 0%, transparent 70%);
+  }
+  .cursor-glow {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(93, 122, 81, 0.08) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    will-change: transform;
+    transition: transform 0.05s linear;
   }
 
   *:focus-visible {
@@ -16,15 +29,15 @@
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0px 1000px #161b27 inset;
-    -webkit-text-fill-color: #e8eaf0;
-    caret-color: #e8eaf0;
+    -webkit-box-shadow: 0 0 0px 1000px #f2efe9 inset;
+    -webkit-text-fill-color: #2b3027;
+    caret-color: #2b3027;
   }
 }
 
 @layer components {
   .auth-input {
-    @apply w-full bg-surface-raised border border-surface-border rounded-lg px-4 py-3
+    @apply w-full bg-[#fcfbfa] border border-surface-border rounded-lg px-4 py-3
            text-text-primary placeholder-text-placeholder
            focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent
            transition-colors duration-150 text-sm;
@@ -38,10 +51,11 @@
   }
 
   .auth-card {
-    @apply bg-surface-raised border border-surface-border rounded-2xl p-8;
+    @apply bg-surface-raised border border-surface-border rounded-2xl p-8 shadow-sm;
   }
 
   .field-label {
     @apply block text-xs font-medium text-text-secondary uppercase tracking-widest mb-2;
   }
 }
+

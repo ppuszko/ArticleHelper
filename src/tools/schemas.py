@@ -25,13 +25,15 @@ class SectionInfo(BaseModel):
     summary: str 
 
 class ProcessedSection(SectionInfo):
-    section: str    
+    section_name: str    
+    original_content: str
 
 class DocSegment(BaseModel):
     type: LatexSeparators
     content: str = ""
 
-class AuthorsInfo(BaseModel):
-    """Author list and ciation"""
+class DocInfo(BaseModel):
+    """Title, author list and ciation for scientific paper"""
     authors: str = Field("Comma-separated list of authors.")
     citation: str = Field("Citation formula for given resource.")
+    title: str = Field("Title of the paper")

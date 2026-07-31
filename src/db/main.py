@@ -14,7 +14,6 @@ from ..config.db import DBConfig
 def init_engine(url: str = DBConfig.DB_URL) -> AsyncEngine:
     return create_async_engine(url=url)
 
-
 def init_sessionmaker(engine: AsyncEngine) -> async_sessionmaker:
     return async_sessionmaker(
         bind=engine,
@@ -22,7 +21,7 @@ def init_sessionmaker(engine: AsyncEngine) -> async_sessionmaker:
         expire_on_commit=False
     )
 
-async def get_sessionmaker(request: Request) -> async_sessionmaker[AsyncSession]:
+def get_sessionmaker(request: Request) -> async_sessionmaker[AsyncSession]:
     sessionmaker = getattr(request.app.state, "sessionmaker", None)
     if sessionmaker is None:
         raise RuntimeError("Sessionmaker not initialized")

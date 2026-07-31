@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { logout } from '../api/auth'
 
 export default function DashboardPage() {
@@ -20,12 +20,15 @@ export default function DashboardPage() {
         <p className="text-text-secondary text-sm">
           Replace this page with your application.
         </p>
-        <button
-          onClick={handleLogout}
-          className="mt-4 text-xs text-text-secondary hover:text-status-error transition-colors"
-        >
-          Sign out
-        </button>
+        <div className="space-x-4">
+            <Link to="/process-directory" className="text-blue-600 hover:underline">Process Directory</Link>
+            <button
+              onClick={handleLogout}
+              className="text-xs text-text-secondary hover:text-status-error transition-colors"
+            >
+              Sign out
+            </button>
+        </div>
       </div>
     </div>
   )

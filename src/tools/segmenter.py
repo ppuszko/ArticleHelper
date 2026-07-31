@@ -1,4 +1,4 @@
-from tools.schemas import DocSegment, LatexSeparators
+from .schemas import DocSegment, LatexSeparators
 
 separators =  ["\\title{", "\\author{", "\\section{", 
                "\\subsection{", "\\begin{figure}", 
@@ -7,21 +7,21 @@ separators =  ["\\title{", "\\author{", "\\section{",
 class Segmenter:
     def __init__(self, separators: list[str] = separators):
         self._separators = separators
-        self._segments: list[DocSegment] = []
 
     def create_segments(self, text: str):
         position = 0
+        segments: list[DocSegment] = []
 
         while position < len(text):    
             next_sep = self._find_next_separator(text, position, self._separators)
             if next_sep is None:
                 break
             
-            if len(self._segments) > 0:
+            if len(segments) > 0:
                 if text[position:next_sep[0]] in ["", " ", "\n", "\n\n", "\n\n\n"]:
-                    self._segments.pop()
+                    segments.pop()
                 else:
-                    self._segments[-1].content = text[position:next_sep[0]]
+                    segments[-1].content = text[position:next_sep[0]]
             
             position = next_sep[2]
             if next_sep[1] == LatexSeparators.COMMENT.value:
@@ -29,11 +29,11 @@ class Segmenter:
                 if next_sep is None:
                     break
                 position = next_sep[2]
-            self._segments.append(DocSegment(type=LatexSeparators(next_sep[1])))
+            segments.append(DocSegment(type=LatexSeparators(next_sep[1])))
         
-        self._segments[-1].content = text[position:]
+        segments[-1].content = text[position:]
 
-        return self._segments
+        return segments
     
     def get_fig_paths(self, text: str, start: int = 0) -> list[str]:
         paths = []
@@ -73,7 +73,7 @@ class Segmenter:
 
         return paths
     
-    def get_marker_name(self, text: str, start: int = 0) -> str:
+    def get_segment_name(self, text: str, start: int = 0) -> str:
         close_brace = self._find_next_separator(text, start, ["}"])
         if close_brace is None:
             raise RuntimeError(f"Given text does not contain latex marker residuals. Text: {text}")

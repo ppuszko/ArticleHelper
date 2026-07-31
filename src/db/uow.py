@@ -35,5 +35,5 @@ class UnitOfWork:
 async def get_uow(sessionmaker: async_sessionmaker[AsyncSession] = Depends(get_sessionmaker)) -> AsyncIterator[UnitOfWork]:
     uow = UnitOfWork(sessionmaker)
     async with uow:
-        yield uow    
+        yield uow  
 

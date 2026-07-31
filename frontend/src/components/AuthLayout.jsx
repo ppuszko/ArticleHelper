@@ -6,7 +6,7 @@ export default function AuthLayout({ title, subtitle, children }) {
         className="fixed inset-0 pointer-events-none"
         style={{
           backgroundImage:
-            'linear-gradient(rgba(108,140,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(108,140,255,0.03) 1px, transparent 1px)',
+            'linear-gradient(rgba(93,122,81,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(93,122,81,0.05) 1px, transparent 1px)',
           backgroundSize: '48px 48px',
         }}
       />
